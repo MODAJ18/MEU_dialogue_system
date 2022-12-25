@@ -1,0 +1,6 @@
+# 1
+pip install -U textblob
+python -m textblob.download_corpora
+
+# 2
+pip install -U scikit-learn
