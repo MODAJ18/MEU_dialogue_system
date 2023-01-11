@@ -10,3 +10,9 @@ pip install transformers datasets
 
 # 4 
 pip install torch
+
+# 5
+pip install git+https://github.com/PrithivirajDamodaran/Parrot_Paraphraser.git
+pip install transformers[sentencepiece]
+
+
