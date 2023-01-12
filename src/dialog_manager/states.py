@@ -32,6 +32,36 @@ allowed_states = {"music": music_states,
                   "german": german_states,
                   "shoes": shoes_states}
 
+# allowed actions
+allowed_actions = {"music": ["activate", "deactivate"],
+                  "lights": ["activate", "deactivate"],
+                  "volume": ["increase", "decrease"],
+                  "heat": ["increase", "decrease"],
+                  "lamp": ["activate", "deactivate"],
+                  "newspaper": ["bring"],
+                  "juice": ["bring"],
+                  "socks": ["bring"],
+                  "chinese": ["change language"],
+                  "korean": ["change language"],
+                  "english": ["change language"],
+                  "german": ["change language"],
+                  "shoes": ["bring"]}
+
+# allowed rooms
+allowed_rooms = {'music': ["none"],
+                 'lights': ["none", "bedroom", "washroom", "kitchen"],
+                 'volume': ["none"],
+                 'heat': ["none", "bedroom", "washroom", "kitchen"],
+                 'lamp': ["none"],
+                 'newspaper': ["none"],
+                 'juice': ["none"],
+                 'socks': ["none"],
+                 'chinese': ["none"],
+                 'korean': ["none"],
+                 'english': ["none"],
+                 'german': ["none"],
+                 'shoes': ["none"]}
+
 # key table (foreign key + state)
 # states = {"music": {"none": "off"},
 #           "lights": {"none": "on", "bedroom": "on", "washroom":"on", "kitchen": "on"},
