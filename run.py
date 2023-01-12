@@ -3,8 +3,7 @@ from src.dialog_manager.manage import verify_intent
 from src.dialog_manager.manage import manage_dialog
 
 import pickle
-import os
-import random
+import osimport random
 import datetime
 import torch
 import speech_recognition as sr
@@ -56,6 +55,7 @@ def greet_time():
 
     else:
         speak("Good Evening!")
+
 
 initial_states = {"music": {"none": "off"},
                   "lights": {"none": "on", "bedroom": "on", "washroom":"on", "kitchen": "on"},
@@ -162,8 +162,6 @@ if __name__ == "__main__":
                     states_main, prompt_main, prev_states_main = manage_dialog(ver_intent, states)
                     if len(prompt_main) == 1:
                         response = prompt_main[0]
-                    #                     print(ver_intent["object"], prev_states_main[ver_intent["object"]])
-                    #                     print(ver_intent["object"], states_main[ver_intent["object"]])
                     else:
                         response = " ".join(prompt_main[:-1])
                     speak(response)
@@ -176,9 +174,6 @@ if __name__ == "__main__":
 
         elif discourse_prediction == "conversational":
             conversation = Conversation(query)
-            # responses = converser(conversation).generated_responses
-            # response_ind = random.randint(0, len(responses))
-            # response = responses[response_ind]
             response = converser(conversation).generated_responses[-1]
             speak(response)
 

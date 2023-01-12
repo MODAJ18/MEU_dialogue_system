@@ -15,6 +15,9 @@ pip install torch
 pip install git+https://github.com/PrithivirajDamodaran/Parrot_Paraphraser.git
 pip install transformers[sentencepiece]
 
+# 6 
+pip install flask
+
 
 
 
