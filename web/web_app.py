@@ -90,84 +90,91 @@ def index():
 #background process happening without any refreshing
 @app.route('/background_process_test')
 def background_process_test():
+    global PAUSE, INITIAL
+    PAUSE = not PAUSE
     print("nothing function happened!")
+    if PAUSE:
+        if INITIAL:
+            greet_time()
+            INITIAL = not INITIAL
+        # while True:
+        query = 'none'
+        while query == 'none':
+            query = takeCommand().lower()  # Converting user query into lower case
 
-    # greet_time() 
-    # print("22")
-    # while True:   
-    query = takeCommand().lower()  # Converting user query into lower case
-    print("QUERY: {}".format(query))
-    discourse_prediction = get_discourse(query_in=query, labels_in=discourse_labels)
-    print(discourse_prediction)
+        discourse_prediction = get_discourse(query_in=query, labels_in=discourse_labels)
+        print(discourse_prediction)
 
-
-    if discourse_prediction == "command":
-        if 'wikipedia' in query:
-            speak('Searching Wikipedia...')
-            query = query.replace("wikipedia", "")
-            if query == "":
-                query = "nothing"
-            results = wikipedia.summary(query, sentences=5)
-            print(results)
-            response = "According to Wikipedia, {}".format(results)
-            speak(response)
-
-        elif 'open youtube' in query:
-            webbrowser.open("youtube.com")
-            response = "youtube opened"
-            speak(response)
-
-        elif 'open google' in query:
-            webbrowser.open("google.com")
-            response = "google opened"
-            speak(response)
-
-        elif 'play music' in query:
-            music_dir = 'music_dir_of_the_user'
-            songs = os.listdir(music_dir)
-            print(songs)
-            os.startfile(os.path.join(music_dir, songs[0]))
-            response = "playing music"
-
-        elif 'the time' in query:
-            strTime = datetime.datetime.now().strftime("%H:%M:%S")
-            response = f"Sir, the time is {strTime}"
-            speak(response)
-
-        elif ('open stackoverflow' in query) or ('open stack overflow' in query):
-            webbrowser.open('stackoverflow.com')
-            response = "stackoverflow opened"
-
-        elif ('open free code camp' in query) or ('open freecodecamp' in query):
-            webbrowser.open('freecodecamp.org')
-            response = "freecodecamp opened"
-
-        else:
-            if "in home" in query:
-                intents = ir_b.get_intents(query, les_b, tfidfv_b)
-                if intents['object'] == "none":
-                    intents['object'] = "english"
-                    print(intents)
-
-                # manage dialog and state change
-                ver_intent = intents
-                states_main, prompt_main, prev_states_main = manage_dialog(ver_intent, states)
-                if len(prompt_main) == 1:
-                    response = prompt_main[0]
-                else:
-                    response = " ".join(prompt_main[:-1])
+        if discourse_prediction == "command":
+            if 'wikipedia' in query:
+                speak('Searching Wikipedia...')
+                query = query.replace("wikipedia", "")
+                if query == "":
+                    query = "nothing"
+                results = wikipedia.summary(query, sentences=5)
+                print(results)
+                response = "According to Wikipedia, {}".format(results)
                 speak(response)
+
+            elif 'open youtube' in query:
+                webbrowser.open("youtube.com")
+                response = "youtube opened"
+                speak(response)
+
+            elif 'open google' in query:
+                webbrowser.open("google.com")
+                response = "google opened"
+                speak(response)
+
+            elif 'play music' in query:
+                music_dir = 'music_dir_of_the_user'
+                songs = os.listdir(music_dir)
+                print(songs)
+                os.startfile(os.path.join(music_dir, songs[0]))
+                response = "playing music"
+
+            elif 'the time' in query:
+                strTime = datetime.datetime.now().strftime("%H:%M:%S")
+                response = f"Sir, the time is {strTime}"
+                speak(response)
+
+            elif ('open stackoverflow' in query) or ('open stack overflow' in query):
+                webbrowser.open('stackoverflow.com')
+                response = "stackoverflow opened"
+
+            elif ('open free code camp' in query) or ('open freecodecamp' in query):
+                webbrowser.open('freecodecamp.org')
+                response = "freecodecamp opened"
+
             else:
-                # asking
-                conversation = Conversation(query)
-                response = converser(conversation).generated_responses[-1]
-                speak(response)
+                if "in home" in query:
+                    intents = ir_b.get_intents(query, les_b, tfidfv_b)
+                    if intents['object'] == "none":
+                        intents['object'] = "english"
+                        print(intents)
 
-    elif discourse_prediction == "conversational":
-        conversation = Conversation(query)
-        response = converser(conversation).generated_responses[-1]
-        speak(response)
-    print(response)
+                    # manage dialog and state change
+                    ver_intent = intents
+                    states_main, prompt_main, prev_states_main = manage_dialog(ver_intent, states)
+                    if len(prompt_main) == 1:
+                        response = prompt_main[0]
+                    else:
+                        response = " ".join(prompt_main[:-1])
+                    speak(response)
+                else:
+                    # asking
+                    conversation = Conversation(query)
+                    response = converser(conversation).generated_responses[-1]
+                    speak(response)
+
+        elif discourse_prediction == "conversational":
+            conversation = Conversation(query)
+            response = converser(conversation).generated_responses[-1]
+            speak(response)
+        print(response)
+        print("DONE")
+    else:
+        print("NOTHING")
 
     return ("nothing")
 
@@ -186,6 +193,8 @@ if __name__ == "__main__":
                     "english": {"none": "on"},
                     "german": {"none": "off"},
                     "shoes": {"none": "not brought"}}
+    PAUSE = False
+    INITIAL = True
 
     # initializing
     with open('../Saved/intention_models.pickle', 'rb') as handle:
